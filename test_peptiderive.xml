@@ -1,0 +1,24 @@
+<ROSETTASCRIPTS>
+	<FILTERS>
+		<!-- values were chosen to be *different* than defaults -->
+		<!-- scorefxn was chosen randomly to one of the predefined values, that isn't the default one -->
+		report_gzip="true"
+		scorefxn_deriver="soft_rep"
+		optimize_cyclic_threshold="0.5"
+		restrict_receptors_to_chains="A,B"
+		skip_zero_isc="false"
+		<PeptideDeriver name="peptide_deriver"
+			pep_lengths="10"
+			dump_prepared_pose="true"
+			dump_peptide_pose="true"
+			dump_cyclic_poses="true"
+			dump_report_file="true"
+			do_minimize="false"
+			restrict_partners_to_chains="Z"
+			report_format="markdown"
+			/>
+	</FILTERS>
+	<PROTOCOLS>
+		<Add filter_name="peptide_deriver" />
+	</PROTOCOLS>
+</ROSETTASCRIPTS>

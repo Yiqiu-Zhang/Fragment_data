@@ -1,0 +1,70 @@
+# Peptiderive report file 6fay_3_0001
+
+- Chains: 2
+- Rosetta version: rosetta.source.release-280 2021.16+release.8ee4f02 commit 8ee4f02ac5768a8a339ffada74cb0ff5f778b3e6 from https://www.rosettacommons.org
+- (*) in the 'Relative interface score (%)' column means positive values were calculated for these entries, indicating unfavorable interactions
+- (**) in the 'Cyclized interface score' column means that a cyclized model was not constructed for this cyclizable peptide, since its energy contribution (in its linear form) was not significant
+- Disulfide-cyclized peptide models have additional N- and C-terminal cysteine residues, not shown in the 'Sequence' column
+
+
+## Best linear peptides for all chain pairs
+
+| Receptor | Partner | Peptide length | Position | Interface score | Relative interface score (%) | Sequence             |
+|----------|---------|----------------|----------|-----------------|------------------------------|----------------------|
+| A        | Z       | 10             | 10       | -23.819         | *                            | IIVSSPLSTF           |
+
+
+## Best disulfide cyclizable peptides for all chain pairs
+
+| Receptor | Partner | Peptide length | Position | Interface score | Relative interface score (%) | Extra info     | Cyclized interface score | Sequence             |
+|----------|---------|----------------|----------|-----------------|------------------------------|----------------|--------------------------|----------------------|
+
+## Best end-to-end cyclizable peptides for all chain pairs
+
+| Receptor | Partner | Peptide length | Position | Interface score | Relative interface score (%) | Extra info     | Cyclized interface score | Sequence             |
+|----------|---------|----------------|----------|-----------------|------------------------------|----------------|--------------------------|----------------------|
+
+
+## All linear peptides
+
+### Receptor= A Partner= Z Peptide_length= 10
+- Total interface score: 770.381
+
+| Position | Interface score | Relative interface score (%) |
+|----------|-----------------|------------------------------|
+| 1        | 14.185          | 1.84                         |
+| 2        | 9.137           | 1.19                         |
+| 3        | 1.103           | 0.14                         |
+| 4        | 0.117           | 0.02                         |
+| 5        | -2.932          | *                            |
+| 6        | -5.657          | *                            |
+| 7        | -17.247         | *                            |
+| 8        | -19.272         | *                            |
+| 9        | -21.720         | *                            |
+| 10       | -23.819         | *                            |
+| 11       | -15.874         | *                            |
+| 12       | -16.842         | *                            |
+| 13       | -9.380          | *                            |
+| 14       | -7.409          | *                            |
+| 15       | -0.314          | *                            |
+| 16       | -0.874          | *                            |
+| 17       | 5.094           | 0.66                         |
+| 18       | 7.027           | 0.91                         |
+| 19       | 3.066           | 0.40                         |
+| 20       | 2.987           | 0.39                         |
+| 21       | 2.975           | 0.39                         |
+| 22       | 8.287           | 1.08                         |
+| 23       | 3.296           | 0.43                         |
+| 24       | 2.485           | 0.32                         |
+| 25       | -6.203          | *                            |
+| 26       | 776.232         | 100.76                       |
+---
+
+## All disulfide cyclizable peptides
+
+
+## All end-to-end cyclizable peptides
+
+
+
+*end of report*
