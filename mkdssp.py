@@ -13,7 +13,7 @@ for i in range(256):
 
     subprocess.call(['aws', 's3', 'cp', f'{bucket_base}/pdb_{i}/',
                      f'{local_base}/pdb/pdb_{i}', '--recursive'])
-    subprocess.call(['mkdir', f'{local_base}/dssp/ds p_{i}'])
+    subprocess.call(['mkdir', f'{local_base}/dssp/dssp_{i}'])
     files = os.listdir(f'{local_base}/pdb/pdb_{i}')
 
     for pdb_file_name in files:
