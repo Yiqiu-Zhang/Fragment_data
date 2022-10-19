@@ -15,10 +15,10 @@ fragment_base = 's3://Fragment_data'
 for i in range(1):
     pdb_path= f'{bucket_base}/pdb_{i}/'
     cp_cmd = f'aws s3 cp  . --recursive'
-    '''
+
     subprocess.call(['aws', 's3', 'cp', f'{bucket_base}/pdb_{i}/',
                      f'{local_base}/pdb_{i}', '--recursive'])
-    '''
+
     files = os.listdir(f'{local_base}/pdb_{i}')
     for pdb_file_name in files:
         print(pdb_file_name)
