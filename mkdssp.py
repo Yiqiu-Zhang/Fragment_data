@@ -20,17 +20,16 @@ for i in range(1):
                      f'{local_base}/pdb_{i}', '--recursive'])
     '''
     files = os.listdir(f'{local_base}/pdb_{i}')
-    print('Successful downloaded')
     for pdb_file_name in files:
         print(pdb_file_name)
         pdb_path = f'{local_base}/pdb_{i}/{pdb_file_name}'
         print(pdb_path)
         subprocess.call(['sed', '-i', sed_cmd, pdb_path])
         print('Successful sed')
-        '''
+
         dssp_name = pdb_file_name.split('.')[0]+'.dssp'
         dssp_path = f'{local_base}/dssp_{i}/{dssp_name}'
         subprocess.call(['mkdssp', '-i', pdb_path, '-o', dssp_path])
-
+        print('Successful mkdssp')
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/dssp_{i}',
-                     f'{fragment_base}/dssp/dssp_{i}/', '--recursive'])'''
+                     f'{fragment_base}/dssp/dssp_{i}/', '--recursive'])
