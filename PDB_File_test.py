@@ -59,6 +59,8 @@ for i in range(23):
         structure = parser.get_structure(name, full_pdb_path)
         model = structure[0]
 
+        dssp = DSSP(model, full_dssp_path, dssp='mkdssp', file_type='DSSP')
+
         # Add two 0 length chians, one for the peptide fragment(ID Z), two for protein fragment(ID A B)
         prot_chain = model.child_list[0]
         prot_len = len(prot_chain)
@@ -67,8 +69,8 @@ for i in range(23):
         third_chain = Chain("B")
         model.add(pep_chain)
         model.add(third_chain)
-        print(name)
-        dssp = DSSP(model, full_dssp_path, dssp='mkdssp', file_type='DSSP')
+
+
         # Return residue idx if RSA < MAX_RSA (core residue)
         res_index = list(map(lambda x: x[0] - 1 if x[3] < MAX_RSA else None, dssp.property_list))
         pep_lib = find_pep(res_index)
