@@ -14,6 +14,7 @@ import subprocess
 MIN_PROT_L = 50
 MAX_PEP_L = 25
 MIN_PEP_L = 5
+MIN_TOTAL_L = 150
 MAX_RSA = 0.25 # The relative solvent accessibility, below which, the residue are determined as core residue
 
 bucket_base = 's3://AF_data/true_structure_dataset/pdb'
@@ -70,7 +71,7 @@ for i in range(23):
         # Add two 0 length chians, one for the peptide fragment(ID Z), two for protein fragment(ID A B)
         prot_chain = model.child_list[0]
         prot_len = len(prot_chain)
-        if prot_len < 150:
+        if prot_len < MIN_TOTAL_L:
             continue
         prot_chain.id = "A"
         pep_chain = Chain("Z")
@@ -89,6 +90,7 @@ for i in range(23):
 
             # ignore prot fragment if the length is less than MIN_PROT_L
             # ignore residues that next the peptide fragment
+            del_res = []
             if start < MIN_PROT_L < prot_len - end:
                 del_res = prot_chain.child_list[:end + 6]
 
@@ -100,7 +102,6 @@ for i in range(23):
                 third_chain_res = prot_chain.child_list[end + 6:]
                 for res in third_chain_res:
                     third_chain.add(res)
-
 
             # add residues to its chain
             for res in pep:
