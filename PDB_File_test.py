@@ -51,6 +51,7 @@ for i in range(23):
     subprocess.call(['mkdir', f'{local_base}/frag/pdb/pdb_{i}'])
     files = os.listdir(f'{local_base}/dssp/dssp_{i}')
     for dssp_file in files:
+
         name = dssp_file.split('.')[0]
         full_dssp_path = f'{local_base}/dssp/dssp_{i}/'+ name +'.dssp'
         full_pdb_path = f'{local_base}/pdb/pdb_{i}/'+ name +'.pdb'
@@ -58,51 +59,53 @@ for i in range(23):
         # From the .pdb file, get the structures and Pick the first conformer.
         structure = parser.get_structure(name, full_pdb_path)
         model = structure[0]
+        try:
+            dssp = DSSP(model, full_dssp_path, dssp='mkdssp', file_type='DSSP')
 
-        dssp = DSSP(model, full_dssp_path, dssp='mkdssp', file_type='DSSP')
-
-        # Add two 0 length chians, one for the peptide fragment(ID Z), two for protein fragment(ID A B)
-        prot_chain = model.child_list[0]
-        prot_len = len(prot_chain)
-        prot_chain.id = "A"
-        pep_chain = Chain("Z")
-        third_chain = Chain("B")
-        model.add(pep_chain)
-        model.add(third_chain)
+            # Add two 0 length chians, one for the peptide fragment(ID Z), two for protein fragment(ID A B)
+            prot_chain = model.child_list[0]
+            prot_len = len(prot_chain)
+            prot_chain.id = "A"
+            pep_chain = Chain("Z")
+            third_chain = Chain("B")
+            model.add(pep_chain)
+            model.add(third_chain)
 
 
-        # Return residue idx if RSA < MAX_RSA (core residue)
-        res_index = list(map(lambda x: x[0] - 1 if x[3] < MAX_RSA else None, dssp.property_list))
-        pep_lib = find_pep(res_index)
-        subprocess.call(['mkdir',f'{local_base}/frag/pdb/pdb_{i}/{name}'])
-        for start, end, frag_len in pep_lib:
+            # Return residue idx if RSA < MAX_RSA (core residue)
+            res_index = list(map(lambda x: x[0] - 1 if x[3] < MAX_RSA else None, dssp.property_list))
+            pep_lib = find_pep(res_index)
+            subprocess.call(['mkdir',f'{local_base}/frag/pdb/pdb_{i}/{name}'])
+            for start, end, frag_len in pep_lib:
 
-            # if frag_len <= MAX_PEP_L: # if fragment length is less than 25, do not apply slide window
-            pep = prot_chain.child_list[start:end + 1]
+                # if frag_len <= MAX_PEP_L: # if fragment length is less than 25, do not apply slide window
+                pep = prot_chain.child_list[start:end + 1]
 
-            # ignore prot fragment if the length is less than MIN_PROT_L
-            # ignore residues that next the peptide fragment
-            if start < MIN_PROT_L < prot_len - end:
-                del_res = prot_chain.child_list[:end + 6]
+                # ignore prot fragment if the length is less than MIN_PROT_L
+                # ignore residues that next the peptide fragment
+                if start < MIN_PROT_L < prot_len - end:
+                    del_res = prot_chain.child_list[:end + 6]
 
-            elif start > MIN_PROT_L > prot_len - end:
-                del_res = prot_chain.child_list[start - 5:]
+                elif start > MIN_PROT_L > prot_len - end:
+                    del_res = prot_chain.child_list[start - 5:]
 
-            elif start > MIN_PROT_L < prot_len - end:
-                del_res = prot_chain.child_list[start - 5:]
-                third_chain_res = prot_chain.child_list[end + 6:]
-                for res in third_chain_res:
-                    third_chain.add(third_chain_res)
+                elif start > MIN_PROT_L < prot_len - end:
+                    del_res = prot_chain.child_list[start - 5:]
+                    third_chain_res = prot_chain.child_list[end + 6:]
+                    for res in third_chain_res:
+                        third_chain.add(third_chain_res)
 
-            # add residues to its chain
-            for res in pep:
-                pep_chain.add(res)
-            for res in del_res:
-                prot_chain.detach_child(res.id)
+                # add residues to its chain
+                for res in pep:
+                    pep_chain.add(res)
+                for res in del_res:
+                    prot_chain.detach_child(res.id)
 
-            frag_path = f'{local_base}/frag/pdb/pdb_{i}/{name}/{name}_{start}_{end}.pdb'
-            io.set_structure(structure)
-            io.save(frag_path)
+                frag_path = f'{local_base}/frag/pdb/pdb_{i}/{name}/{name}_{start}_{end}.pdb'
+                io.set_structure(structure)
+                io.save(frag_path)
+        except:
+            print(name)
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/frag/pdb/pdb_{i}/',
                              f'{fragment_base}/dssp/dssp_{i}/', '--recursive'])
 
