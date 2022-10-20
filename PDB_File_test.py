@@ -93,7 +93,7 @@ for i in range(23):
                 del_res = prot_chain.child_list[start - 5:]
                 third_chain_res = prot_chain.child_list[end + 6:]
                 for res in third_chain_res:
-                    third_chain.add(third_chain_res)
+                    third_chain.add(res)
 
             # add residues to its chain
             for res in pep:
