@@ -104,8 +104,7 @@ for i in range(23):
             frag_path = f'{local_base}/frag/pdb/pdb_{i}/{name}/{name}_{start}_{end}.pdb'
             io.set_structure(structure)
             io.save(frag_path)
-        except:
-            print(name)
+
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/frag/pdb/pdb_{i}/',
                              f'{fragment_base}/dssp/dssp_{i}/', '--recursive'])
 
