@@ -57,10 +57,15 @@ for i in range(23):
         full_pdb_path = f'{local_base}/pdb/pdb_{i}/'+ name +'.pdb'
 
         # From the .pdb file, get the structures and Pick the first conformer.
-        structure = parser.get_structure(name, full_pdb_path)
-        model = structure[0]
+        base_structure = parser.get_structure(name, full_pdb_path)
+        model = base_structure[0]
         print(name)
         dssp = DSSP(model, full_dssp_path, dssp='mkdssp', file_type='DSSP')
+
+        # Return residue idx if RSA < MAX_RSA (core residue)
+        res_index = list(map(lambda x: x[0] - 1 if x[3] < MAX_RSA else None, dssp.property_list))
+        pep_lib = find_pep(res_index)
+        subprocess.call(['mkdir',f'{local_base}/frag/pdb/pdb_{i}/{name}'])
 
         # Add two 0 length chians, one for the peptide fragment(ID Z), two for protein fragment(ID A B)
         prot_chain = model.child_list[0]
@@ -71,12 +76,11 @@ for i in range(23):
         model.add(pep_chain)
         model.add(third_chain)
 
-
-        # Return residue idx if RSA < MAX_RSA (core residue)
-        res_index = list(map(lambda x: x[0] - 1 if x[3] < MAX_RSA else None, dssp.property_list))
-        pep_lib = find_pep(res_index)
-        subprocess.call(['mkdir',f'{local_base}/frag/pdb/pdb_{i}/{name}'])
         for start, end, frag_len in pep_lib:
+
+            cp_struc = base_structure.copy()
+            cp_model = cp_struc[0]
+            prot_chain, pep_chain, third_chain = cp_model.child_list
 
             # if frag_len <= MAX_PEP_L: # if fragment length is less than 25, do not apply slide window
             pep = prot_chain.child_list[start:end + 1]
@@ -102,7 +106,7 @@ for i in range(23):
                 prot_chain.detach_child(res.id)
 
             frag_path = f'{local_base}/frag/pdb/pdb_{i}/{name}/{name}_{start}_{end}.pdb'
-            io.set_structure(structure)
+            io.set_structure(cp_struc)
             io.save(frag_path)
 
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/frag/pdb/pdb_{i}/',
