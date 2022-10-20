@@ -70,6 +70,8 @@ for i in range(23):
         # Add two 0 length chians, one for the peptide fragment(ID Z), two for protein fragment(ID A B)
         prot_chain = model.child_list[0]
         prot_len = len(prot_chain)
+        if prot_len < 150:
+            continue
         prot_chain.id = "A"
         pep_chain = Chain("Z")
         third_chain = Chain("B")
@@ -98,6 +100,7 @@ for i in range(23):
                 third_chain_res = prot_chain.child_list[end + 6:]
                 for res in third_chain_res:
                     third_chain.add(res)
+
 
             # add residues to its chain
             for res in pep:
