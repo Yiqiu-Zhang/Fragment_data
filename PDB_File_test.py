@@ -53,7 +53,7 @@ for i in range(23):
     for dssp_file in files:
         name = dssp_file.split('.')[0]
         full_dssp_path = f'{local_base}/dssp/dssp_{i}'+ name +'.dssb'
-        full_pdb_path = f'{bucket_base}/pdb_{i}/'+ name +'.pdb'
+        full_pdb_path = f'{local_base}/pdb/pdb_{i}/'+ name +'.pdb'
 
         # From the .pdb file, get the structures
         structure = parser.get_structure(name, full_pdb_path)
