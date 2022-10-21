@@ -119,6 +119,7 @@ for i in range(10,100):
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/frag/pdb/pdb_{i}/',
                              f'{fragment_base}/frag/pdb/dssp_{i}/', '--recursive'])
 
+    subprocess.call(['rm', '-r', f'{local_base}/frag/pdb/pdb_{i}/*'])
 '''
 structure = parser.get_structure('6FAY', '6fay.pdb') # id - string, the id that will be used for the structure
 res_list = []
