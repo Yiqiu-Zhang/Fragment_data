@@ -48,7 +48,7 @@ def find_pep(core):
 
     return pep_list
 
-for i in range(100):
+for i in range(10,100):
     subprocess.call(['mkdir', f'{local_base}/frag/pdb/pdb_{i}'])
     files = os.listdir(f'{local_base}/dssp/dssp_{i}')
     for dssp_file in files:
@@ -117,7 +117,7 @@ for i in range(100):
             print('Drop the pdb file As it is not valid')
             continue
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/frag/pdb/pdb_{i}/',
-                             f'{fragment_base}/frag/pdb/pdb_{i}/', '--recursive'])
+                             f'{fragment_base}/frag/pdb/dssp_{i}/', '--recursive'])
 
 '''
 structure = parser.get_structure('6FAY', '6fay.pdb') # id - string, the id that will be used for the structure
