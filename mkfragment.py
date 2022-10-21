@@ -48,7 +48,7 @@ def find_pep(core):
 
     return pep_list
 
-for i in range(10,100):
+for i in range(14,100):
     subprocess.call(['mkdir', f'{local_base}/frag/pdb/pdb_{i}'])
     files = os.listdir(f'{local_base}/dssp/dssp_{i}')
     for dssp_file in files:
