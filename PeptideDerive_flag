@@ -1,0 +1,9 @@
+-in:file:s testfile/6fay_PepID_26_42.pdb
+-jd2:delete_old_poses
+-nstruct 1
+-out:chtimestamp
+-ex1
+-ex2
+-randomize_missing_coords
+-ignore_unrecognized_res
+-overwrite
