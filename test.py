@@ -10,13 +10,14 @@ local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
 fragment_base = 's3://Fragment_data'
 
 
-def DSSP(pdb_name,i):
-    pdb_path = f'{local_base}/pdb/pdb_{i}/{pdb_name}'
-    subprocess.call(['sed', '-i', sed_cmd, pdb_path])  # Adding line to .pdb make it a valid pdb file
+def DSSP(pdb_names,i):
+    for pdb_name in pdb_names:
+        pdb_path = f'{local_base}/pdb/pdb_{i}/{pdb_name}'
+        subprocess.call(['sed', '-i', sed_cmd, pdb_path])  # Adding line to .pdb make it a valid pdb file
 
-    dssp_name = pdb_name.split('.')[0] + '.dssp'
-    dssp_path = f'{local_base}/dssp/dssp_{i}/{dssp_name}'
-    subprocess.call(['mkdssp', '-i', pdb_path, '-o', dssp_path])
+        dssp_name = pdb_name.split('.')[0] + '.dssp'
+        dssp_path = f'{local_base}/dssp/dssp_{i}/{dssp_name}'
+        subprocess.call(['mkdssp', '-i', pdb_path, '-o', dssp_path])
 
 
 for index in range(100,256): #
