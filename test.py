@@ -2,7 +2,7 @@ import os
 import subprocess
 import multiprocessing
 
-PROCESS_NUM = 2
+PROCESS_NUM = 20
 
 sed_cmd = '1i CRYST1    1.000    1.000    1.000  90.00  90.00  90.00 P 1           1'
 bucket_base = 's3://AF_data/true_structure_dataset/pdb'
@@ -20,7 +20,8 @@ def DSSP(pdb_names,i):
         subprocess.call(['mkdssp', '-i', pdb_path, '-o', dssp_path])
 
 
-for index in range(100,256): #
+
+for index in range(61,256): #
 
     subprocess.call(['aws', 's3', 'cp', f'{bucket_base}/pdb_{index}/',
                      f'{local_base}/pdb/pdb_{index}', '--recursive'])
