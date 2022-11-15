@@ -18,6 +18,7 @@ def DSSP(pdb_names,i):
         dssp_name = pdb_name.split('.')[0] + '.dssp'
         dssp_path = f'{local_base}/dssp/dssp_{i}/{dssp_name}'
         subprocess.call(['mkdssp', '-i', pdb_path, '-o', dssp_path])
+        print(pdb_name)
 
 
 
