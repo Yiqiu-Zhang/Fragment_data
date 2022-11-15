@@ -1,10 +1,3 @@
-
-'''
-/mnt/lustre/zhangyiqiu/rosetta_src_2021.16.61629_bundle/main/source/bin/rosetta_scripts.default.linuxgccrelease
--in:file:s 2hle_remixed.pdb -jd2:delete_old_poses -nstruct 1 -out:chtimestamp -ex1 -ex2 -randomize_missing_coords -ignore_unrecognized_res -overwrite -parser:protocol test_peptiderive.xml -scorefile testscore
-
-'''
-
 from Bio.PDB.Chain import Chain
 from Bio.PDB import PDBIO, PDBParser
 from Bio.PDB.DSSP import DSSP
@@ -17,7 +10,7 @@ MIN_PEP_L = 5
 MIN_TOTAL_L = 150
 MAX_RSA = 0.25 # The relative solvent accessibility, below which, the residue are determined as core residue
 
-bucket_base = 's3://AF_data/true_structure_dataset/pdb'
+turePDB_base = 's3://AF_data/true_structure_dataset/pdb'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
 fragment_base = 's3://Fragment_data'
 
@@ -116,7 +109,8 @@ for i in range(14,100):
         except:
             print('Drop the pdb file As it is not valid')
             continue
+
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/frag/pdb/pdb_{i}/',
-                             f'{fragment_base}/frag/pdb/dssp_{i}/', '--recursive'])
+                             f'{fragment_base}/frag/frag_{i}/', '--recursive'])
 
     subprocess.call(['rm', '-r', f'{local_base}/frag/pdb/pdb_{i}/'])

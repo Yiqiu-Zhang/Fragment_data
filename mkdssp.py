@@ -7,9 +7,7 @@ bucket_base = 's3://AF_data/true_structure_dataset/pdb'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
 fragment_base = 's3://Fragment_data'
 
-
-
-for i in range(256):
+for i in range(60,256): #
 
     subprocess.call(['aws', 's3', 'cp', f'{bucket_base}/pdb_{i}/',
                      f'{local_base}/pdb/pdb_{i}', '--recursive'])
@@ -19,7 +17,7 @@ for i in range(256):
     for pdb_file_name in files:
 
         pdb_path = f'{local_base}/pdb/pdb_{i}/{pdb_file_name}'
-        subprocess.call(['sed', '-i', sed_cmd, pdb_path])
+        subprocess.call(['sed', '-i', sed_cmd, pdb_path]) # Adding line to .pdb make it a valid pdb file
 
 
         dssp_name = pdb_file_name.split('.')[0]+'.dssp'
