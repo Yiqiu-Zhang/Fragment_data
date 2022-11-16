@@ -8,7 +8,7 @@ import os
 import subprocess
 import feature_pipeline as featurepipe
 
-rosetta_base = 'mnt/lustre/zhangyiqiu/rosetta_src_2021.16.61629_bundle/main/source/bin'
+rosetta_base = '/mnt/lustre/zhangyiqiu/rosetta_src_2021.16.61629_bundle/main/source/bin'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
 fragment_base = f's3://Fragment_data/frag'
 # rosetta_base = '/home/PJLAB/zhangyiqiu/Documents/rosetta_src_2021.16.61629_bundle/main/source/bin'
