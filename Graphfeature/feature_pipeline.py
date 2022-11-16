@@ -23,29 +23,32 @@ receptor= 'E'
 Calculate binding_matrix & binding_sites
 '''
 def PDBtoFeature(complex_info, pdbpath, block_num, fragroot, frag_position):
+    parser = PDBParser()
+    base_structure = parser.get_structure(f'{fragroot}_{frag_position}', pdbpath)
+    model = base_structure[0]
+    peptide = model['Z']
 
     for info in complex_info:
-        receptor, L_pep, start_position, _ = info
+        receptor_name, L_pep, start_position, _ = info
         start_position -= 1
-        parser = PDBParser()
-        base_structure = parser.get_structure('1cso', pdbpath)
-        model = base_structure[0]
-        prot = model[receptor]
-        peptide = model['I']
+        prot = model[receptor_name]
         peptide = peptide.child_list[start_position: start_position+L_pep]
-        pep_sequence = np.asarray([Polypeptide.three_to_index(seq.get_resname()) for seq in peptide])
-        pep_sequence = torch.from_numpy(pep_sequence).to(dtype=torch.int64)
 
-        # calculate Fragment data
+
+        # Calculate peptide data
         binding_matrix = np.asarray([[utils.res_binding(a,z) for a in prot] for z in peptide])
         binding_sites = np.asarray([i for i in range(len(prot)) if any(binding_matrix[:,i])>0 ])
+        pep_sequence = np.asarray([Polypeptide.three_to_index(seq.get_resname()) for seq in peptide])
+        pep_sequence = torch.from_numpy(pep_sequence).to(dtype=torch.int64)
         target_sequence = F.one_hot(pep_sequence,20)
 
+        # Calculate receptor data
         node, edge, neighbor_indices = utils.get_graph(prot)
 
+        # Store Data
         local_feature_path = f'/mnt/lustre/zhangyiqiu/Fragment_data/feature/feat_{block_num}'
-        f_peptide_path = f'peptide/{fragroot}/{frag_position}/{receptor}_{start_position}_{L_pep}'
-        f_receptor_path = f'receptor/{fragroot}/{frag_position}/{receptor}'
+        f_peptide_path = f'peptide/{fragroot}/{frag_position}/{receptor_name}_{start_position}_{L_pep}'
+        f_receptor_path = f'receptor/{fragroot}/{frag_position}/{receptor_name}'
         # eg. fragroot = 101M_A_1_renum 
         np.save(f'{local_feature_path}/{f_peptide_path}/binding_matrix_4.npy', binding_matrix)
         np.save(f'{local_feature_path}/{f_peptide_path}/binding_sites_4.npy', binding_sites)
@@ -54,11 +57,13 @@ def PDBtoFeature(complex_info, pdbpath, block_num, fragroot, frag_position):
         np.save(f'{local_feature_path}/{f_receptor_path}/nodes.npy', node)
         np.save(f'{local_feature_path}/{f_receptor_path}/edges.npy', edge)
         np.save(f'{local_feature_path}/{f_receptor_path}/neighbor_indices.npy', neighbor_indices)
+
+        # Upload to Bucket
         bucket_feature_path = f's3://Fragment_data/feature/feat_{block_num}'
         subprocess.call(['aws', 's3', 'cp',f'{local_feature_path}/{f_peptide_path}/',
                          f'{bucket_feature_path}/{f_peptide_path}/', '--recursive'])
-
         subprocess.call(['aws', 's3', 'cp', f'{local_feature_path}/{f_receptor_path}/',
                          f'{bucket_feature_path}/{f_receptor_path}/', '--recursive'])
+
         subprocess.call(['rm', '-r', f'{local_feature_path}/{f_peptide_path}/'])
         subprocess.call(['rm', '-r', f'{local_feature_path}/{f_receptor_path}/'])
