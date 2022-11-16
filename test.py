@@ -10,7 +10,7 @@ MAX_PEP_L = 25
 MIN_PEP_L = 5
 MIN_TOTAL_L = 150
 MAX_RSA = 0.25 # The relative solvent accessibility, below which, the residue are determined as core residue
-PROCESS_NUM = 20
+PROCESS_NUM = 96
 
 turePDB_base = 's3://AF_data/true_structure_dataset/pdb'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
