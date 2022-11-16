@@ -49,7 +49,9 @@ def PDBtoFeature(complex_info, pdbpath, block_num, fragroot, frag_position):
         local_feature_path = f'/mnt/lustre/zhangyiqiu/Fragment_data/feature/feat_{block_num}'
         f_peptide_path = f'peptide/{fragroot}/{frag_position}/{receptor_name}_{start_position}_{L_pep}'
         f_receptor_path = f'receptor/{fragroot}/{frag_position}/{receptor_name}'
-        # eg. fragroot = 101M_A_1_renum 
+        # eg. fragroot = 101M_A_1_renum
+        subprocess.call(['mkdir', '-p', f'{local_feature_path}/{f_peptide_path}'])
+        subprocess.call(['mkdir', '-p', f'{local_feature_path}/{f_receptor_path}'])
         np.save(f'{local_feature_path}/{f_peptide_path}/binding_matrix_4.npy', binding_matrix)
         np.save(f'{local_feature_path}/{f_peptide_path}/binding_sites_4.npy', binding_sites)
         np.save(f'{local_feature_path}/{f_peptide_path}/target_sequence.npy', target_sequence)
