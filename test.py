@@ -44,7 +44,8 @@ def find_pep(core):
     return pep_list
 def Process_dssp(dssp_files):
 
-    for file in dssp_files:
+    while len(dssp_files) > 0:
+        file = dssp_files.pop(0)
         name = file.split('.')[0]
         full_dssp_path = f'{local_base}/dssp/dssp_{i}/' + name + '.dssp'
         full_pdb_path = f'{local_base}/pdb/pdb_{i}/' + name + '.pdb'
