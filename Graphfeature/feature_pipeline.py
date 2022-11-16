@@ -26,12 +26,13 @@ def PDBtoFeature(complex_info, pdbpath, block_num, fragroot, frag_position):
     parser = PDBParser()
     base_structure = parser.get_structure(f'{fragroot}_{frag_position}', pdbpath)
     model = base_structure[0]
-    peptide = model['Z']
+
 
     for info in complex_info:
         receptor_name, L_pep, start_position, _ = info
         start_position -= 1
         prot = model[receptor_name]
+        peptide = model['Z']
         peptide = peptide.get_list()[start_position: start_position + L_pep]
 
 
