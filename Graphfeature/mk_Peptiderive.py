@@ -41,8 +41,8 @@ def parse_peptiderive(peptiderive_str):
         elif line.startswith('# end chain pair'):
             return descrip
 
-for i in range(256):
-    subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{i}', f'{local_base}/frag/frag_{i}', '--recursive'])
+for i in range(1):
+    # subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{i}', f'{local_base}/frag/frag_{i}', '--recursive'])
     block = os.listdir(f'{local_base}/frag/frag_{i}')
     for fragroot in block:
         frag_files = os.listdir(f'{local_base}/frag/frag_{i}/{fragroot}')
@@ -50,7 +50,7 @@ for i in range(256):
             frag_position = file.split('.')[0]
             subprocess.call([f'{rosetta_base}/rosetta_scripts.default.linuxgccrelease',
                             '-in:file:s', f'{local_base}/frag/frag_{i}/{fragroot}/{file}',
-                            '-out:path:all ', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/',
+                            '-out:path:score', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/',
                             '-jd2:delete_old_poses',
                             '-nstruct 1',
                             '-out:chtimestamp',
