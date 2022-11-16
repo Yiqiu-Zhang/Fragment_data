@@ -45,7 +45,7 @@ for i in range(256):
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{i}', f'{local_base}/frag/frag_{i}', '--recursive'])
     block = os.listdir(f'{local_base}/frag/frag_{i}')
     for fragroot in block:
-        frag_files = os.listdir(f'{fragment_base}/frag_{i}/{fragroot}')
+        frag_files = os.listdir(f'{local_base}/frag/frag_{i}/{fragroot}')
         for file in frag_files:
             frag_position = file.split('.')[0]
             subprocess.call([f'{rosetta_base}/rosetta_scripts.default.linuxgccrelease',
