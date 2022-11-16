@@ -3,12 +3,14 @@ from Bio.PDB import PDBIO, PDBParser
 from Bio.PDB.DSSP import DSSP
 import os
 import subprocess
+import multiprocessing
 
 MIN_PROT_L = 50
 MAX_PEP_L = 25
 MIN_PEP_L = 5
 MIN_TOTAL_L = 150
 MAX_RSA = 0.25 # The relative solvent accessibility, below which, the residue are determined as core residue
+PROCESS_NUM = 96
 
 turePDB_base = 's3://AF_data/true_structure_dataset/pdb'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
@@ -40,15 +42,13 @@ def find_pep(core):
             i += 1
 
     return pep_list
+def Process_dssp(dssp_files):
 
-for i in range(14,100):
-    subprocess.call(['mkdir', f'{local_base}/frag/pdb/pdb_{i}'])
-    files = os.listdir(f'{local_base}/dssp/dssp_{i}')
-    for dssp_file in files:
-
-        name = dssp_file.split('.')[0]
-        full_dssp_path = f'{local_base}/dssp/dssp_{i}/'+ name +'.dssp'
-        full_pdb_path = f'{local_base}/pdb/pdb_{i}/'+ name +'.pdb'
+    while len(dssp_files) > 0:
+        file = dssp_files.pop(0)
+        name = file.split('.')[0]
+        full_dssp_path = f'{local_base}/dssp/dssp_{i}/' + name + '.dssp'
+        full_pdb_path = f'{local_base}/pdb/pdb_{i}/' + name + '.pdb'
 
         # From the .pdb file, get the structures and Pick the first conformer.
         base_structure = parser.get_structure(name, full_pdb_path)
@@ -60,7 +60,7 @@ for i in range(14,100):
             # Return residue idx if RSA < MAX_RSA (core residue)
             res_index = list(map(lambda x: x[0] - 1 if x[3] < MAX_RSA else None, dssp.property_list))
             pep_lib = find_pep(res_index)
-            subprocess.call(['mkdir',f'{local_base}/frag/pdb/pdb_{i}/{name}'])
+            subprocess.call(['mkdir', f'{local_base}/frag/frag_{i}/{name}'])
 
             # Add two 0 length chians, one for the peptide fragment(ID Z), two for protein fragment(ID A B)
             prot_chain = model.child_list[0]
@@ -103,14 +103,27 @@ for i in range(14,100):
                 for res in del_res:
                     prot_chain.detach_child(res.id)
 
-                frag_path = f'{local_base}/frag/pdb/pdb_{i}/{name}/{name}_{start}_{end}.pdb'
+                frag_path = f'{local_base}/frag/frag_{i}/{name}/{start}_{end}.pdb'
+                bucket_frag_path = f'{fragment_base}/frag/frag_{i}/{name}/{start}_{end}.pdb'
                 io.set_structure(cp_struc)
                 io.save(frag_path)
+                subprocess.call(['aws', 's3', 'cp', frag_path, bucket_frag_path])
+                subprocess.call(['rm', '-r', frag_path])
         except:
             print('Drop the pdb file As it is not valid')
             continue
 
-    subprocess.call(['aws', 's3', 'cp', f'{local_base}/frag/pdb/pdb_{i}/',
-                             f'{fragment_base}/frag/frag_{i}/', '--recursive'])
+for i in range(256):
+    subprocess.call(['mkdir', f'{local_base}/frag/frag_{i}'])
+    files = os.listdir(f'{local_base}/dssp/dssp_{i}')
 
-    subprocess.call(['rm', '-r', f'{local_base}/frag/pdb/pdb_{i}/'])
+    threads = []
+    sub_l = len(files) // PROCESS_NUM
+    for n in range(PROCESS_NUM + 1):
+        sub_process = multiprocessing.Process(target=Process_dssp, args=(files[n * sub_l:(n + 1) * sub_l],))
+        threads.append(sub_process)
+
+    for x in threads:
+        x.start()
+    for x in threads:
+        x.join()
