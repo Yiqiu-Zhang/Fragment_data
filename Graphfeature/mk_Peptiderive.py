@@ -6,7 +6,7 @@
 
 import os
 import subprocess
-import Graphfeature.feature_pipeline as featurepipe
+import feature_pipeline as featurepipe
 
 rosetta_base = 'mnt/lustre/zhangyiqiu/rosetta_src_2021.16.61629_bundle/main/source/bin'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
