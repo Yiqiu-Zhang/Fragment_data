@@ -42,7 +42,8 @@ def parse_peptiderive(peptiderive_str):
             return descrip
 
 for i in range(256):
-    block = os.listdir(f'{fragment_base}/frag_{i}')
+    subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{i}', f'{local_base}/frag/frag_{i}', '--recursive'])
+    block = os.listdir(f'{local_base}/frag/frag_{i}')
     for fragroot in block:
         frag_files = os.listdir(f'{fragment_base}/frag_{i}/{fragroot}')
         for file in frag_files:
