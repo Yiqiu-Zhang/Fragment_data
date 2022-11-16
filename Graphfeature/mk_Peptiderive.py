@@ -48,9 +48,10 @@ for i in range(1):
         frag_files = os.listdir(f'{local_base}/frag/frag_{i}/{fragroot}')
         for file in frag_files:
             frag_position = file.split('.')[0]
+            subprocess.call(['mkdir','-p', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}'])
             subprocess.call([f'{rosetta_base}/rosetta_scripts.default.linuxgccrelease',
                             '-in:file:s', f'{local_base}/frag/frag_{i}/{fragroot}/{file}',
-                            '-out:path:score', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/',
+                            '-out:path:all', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}',
                             '-jd2:delete_old_poses',
                             '-nstruct 1',
                             '-out:chtimestamp',
@@ -63,7 +64,7 @@ for i in range(1):
 
             pdbpath = f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.pdb'
 
-            with open(f'{local_base}/frag_{i}/{fragroot}/{frag_position}/{frag_position}_0001.peptiderive.txt') as f:
+            with open(f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.peptiderive.txt') as f:
                 input_peptiderive_str = f.read()
                 descriptions = parse_peptiderive(input_peptiderive_str)
 
