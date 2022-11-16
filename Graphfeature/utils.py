@@ -228,7 +228,7 @@ def get_graph(protein_chain):
             del_res.append(prot_res)
             # protein_chain.detach_child(prot_res.id)
             continue
-        prot_res.sort()# In order [<Atom N>, <Atom CA>, <Atom C>, <Atom O>]
+        sorted(prot_res)# In order [<Atom N>, <Atom CA>, <Atom C>, <Atom O>]
         atom_list = prot_res.get_list()
         chain_bb_x.append([atom.get_coord() for atom in atom_list[:4]])
         side_C.append(side_central(atom_list))
