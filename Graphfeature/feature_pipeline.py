@@ -32,7 +32,7 @@ def PDBtoFeature(complex_info, pdbpath, block_num, fragroot, frag_position):
         receptor_name, L_pep, start_position, _ = info
         start_position -= 1
         prot = model[receptor_name]
-        peptide = peptide.child_list[start_position: start_position + L_pep]
+        peptide = peptide[start_position: start_position + L_pep]
 
 
         # Calculate peptide data
