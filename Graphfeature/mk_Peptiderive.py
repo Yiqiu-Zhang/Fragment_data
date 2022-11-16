@@ -36,7 +36,7 @@ def parse_peptiderive(peptiderive_str):
         elif line.startswith('| 0'): # Data line
             _,_,start_position,isc,_  = line.split(' ')
             if isc_range[0]< float(isc) < isc_range[1]:
-                descrip.append([receptor, peptide_length, float(start_position),
+                descrip.append([receptor, int(peptide_length), int(start_position),
                                 float(isc)])
         elif line.startswith('# end chain pair'):
             return descrip
