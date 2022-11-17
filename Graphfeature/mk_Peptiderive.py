@@ -61,7 +61,7 @@ for num in range(50,256): # 0,256
     block = os.listdir(f'{local_base}/frag/frag_{num}')
     for fragroot in block:
         frag_files = os.listdir(f'{local_base}/frag/frag_{num}/{fragroot}')
-        pool = Pool(192) # 128
+        pool = Pool(128) # 128
 
         for pdb_file in frag_files:
             pool.apply_async(func=Rosetta, args=(pdb_file, num, fragroot,))
