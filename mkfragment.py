@@ -113,7 +113,7 @@ def Process_dssp(dssp_files):
             print('Drop the pdb file As it is not valid')
             continue
 
-for i in range(256):
+for i in range(141,256):
     subprocess.call(['mkdir', f'{local_base}/frag/frag_{i}'])
     files = os.listdir(f'{local_base}/dssp/dssp_{i}')
 
