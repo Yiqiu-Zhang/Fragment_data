@@ -62,7 +62,7 @@ for num in range(1):
         pool = Pool(96)
 
         for pdb_file in frag_files:
-            pool.apply_async(target=Rosetta,args=(pdb_file, num,fragroot,))
+            pool.apply_async(func=Rosetta, args=(pdb_file, num,fragroot,))
 
         pool.close()
         pool.join()
