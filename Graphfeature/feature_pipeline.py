@@ -1,23 +1,10 @@
 from __future__ import print_function
-
 import subprocess
-
 import numpy as np
 import utils
 import torch
 import torch.nn.functional as F
 from Bio.PDB import PDBIO, PDBParser, Polypeptide
-
-
-# Test example, will be array latter
-"""
-name = '1cso'
-L_pep = 11
-start_position = 9  - 1
-pdbpath = '/home/PJLAB/zhangyiqiu/PycharmProjects/Fragment_data/6fay_PepID_26_42_0001.pdb'
-pdbpath = '1cso.pdb'
-receptor= 'E'
-"""
 
 '''parse a PDB file contains BOTH protein chain and peptide chain, 
 Calculate binding_matrix & binding_sites
@@ -26,7 +13,6 @@ def PDBtoFeature(complex_info, pdbpath, block_num, fragroot, frag_position):
     parser = PDBParser()
     base_structure = parser.get_structure(f'{fragroot}_{frag_position}', pdbpath)
     model = base_structure[0]
-
 
     for info in complex_info:
         receptor_name, L_pep, start_position, _ = info
