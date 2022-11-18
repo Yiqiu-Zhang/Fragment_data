@@ -54,5 +54,3 @@ def PDBtoFeature(complex_info, pdbpath, block_num, fragroot, frag_position):
         subprocess.call(['aws', 's3', 'cp', f'{local_feature_path}/{f_receptor_path}/',
                          f'{bucket_feature_path}/{f_receptor_path}/', '--recursive'])
 
-        subprocess.call(['rm', '-r', f'{local_feature_path}/{f_peptide_path}/'])
-        subprocess.call(['rm', '-r', f'{local_feature_path}/{f_receptor_path}/'])

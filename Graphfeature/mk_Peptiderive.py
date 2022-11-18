@@ -53,7 +53,6 @@ def Rosetta(file, i, fragroot):
         descriptions = parse_peptiderive(input_peptiderive_str)
 
     featurepipe.PDBtoFeature(descriptions, pdbpath, i, fragroot, frag_position)
-    subprocess.call(['rm', '-r', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/'])
 
 for num in range(50,256): # 0,256
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
@@ -69,5 +68,8 @@ for num in range(50,256): # 0,256
         pool.close()
         pool.join()
 
+        subprocess.call(['rm', '-r', f'{local_base}/feature/feat_{num}/peptide/{fragroot}/'])
+        subprocess.call(['rm', '-r', f'{local_base}/feature/feat_{num}/receptor/{fragroot}/'])
+        subprocess.call(['rm', '-r', f'{local_base}/pepderive/derive_{num}/{fragroot}/'])
         subprocess.call(['rm', '-r', f'{local_base}/frag/frag_{num}/{fragroot}/'])
 
