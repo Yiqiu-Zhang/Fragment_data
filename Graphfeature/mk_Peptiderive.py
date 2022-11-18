@@ -54,7 +54,8 @@ def Rosetta(file, i, fragroot):
 
     featurepipe.PDBtoFeature(descriptions, pdbpath, i, fragroot, frag_position)
 
-for num in range(255,256): # 0,256
+for num in range(256): # 0,256
+    subprocess.call(['mkdir',f'{local_base}/frag/frag_{num}'])
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
                     f'{local_base}/frag/frag_{num}', '--recursive'])
     block = os.listdir(f'{local_base}/frag/frag_{num}')
@@ -68,8 +69,7 @@ for num in range(255,256): # 0,256
         pool.close()
         pool.join()
 
-    subprocess.call(['rm', '-r', f'{local_base}/feature/feat_{num}/peptide/'])
-    subprocess.call(['rm', '-r', f'{local_base}/feature/feat_{num}/receptor/'])
+    subprocess.call(['rm', '-r', f'{local_base}/feature/feat_{num}/'])
     subprocess.call(['rm', '-r', f'{local_base}/pepderive/derive_{num}/'])
     subprocess.call(['rm', '-r', f'{local_base}/frag/frag_{num}/'])
 
