@@ -56,7 +56,7 @@ def Rosetta(file, i, fragroot):
 for num in range(1,50): # 0,256
     subprocess.call(['mkdir',f'{local_base}/frag/frag_{num}'])
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
-                    f'{local_base}/frag/frag_{num}', '--recursive', '> /dev/null'])
+                    f'{local_base}/frag/frag_{num}', '--recursive', '>', '/dev/null'])
     block = os.listdir(f'{local_base}/frag/frag_{num}')
     for fragroot in block:
         frag_files = os.listdir(f'{local_base}/frag/frag_{num}/{fragroot}')
@@ -69,7 +69,7 @@ for num in range(1,50): # 0,256
         pool.join()
 
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/feature/feat_{num}/',
-                    f's3://Fragment_data/feature/feat_{num}', '--recursive', '> /dev/null'])
+                    f's3://Fragment_data/feature/feat_{num}', '--recursive', '>', '/dev/null'])
     subprocess.call(['rm', '-r', f'{local_base}/feature/feat_{num}/'])
     subprocess.call(['rm', '-r', f'{local_base}/pepderive/derive_{num}/'])
     subprocess.call(['rm', '-r', f'{local_base}/frag/frag_{num}/'])
