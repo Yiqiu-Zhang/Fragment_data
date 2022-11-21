@@ -58,6 +58,7 @@ for num in range(1,50): # 0,256
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
                     f'{local_base}/frag/frag_{num}', '--recursive'],
                     stdout=subprocess.DEVNULL)
+    subprocess.call
     print('FINISH COPY ======================================================================================')
     block = os.listdir(f'{local_base}/frag/frag_{num}')
 
