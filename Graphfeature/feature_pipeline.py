@@ -48,9 +48,11 @@ def PDBtoFeature(complex_info, pdbpath, block_num, fragroot, frag_position):
         np.save(f'{local_feature_path}/{f_receptor_path}/neighbor_indices.npy', neighbor_indices)
 
         # Upload to Bucket
+        '''
         bucket_feature_path = f's3://Fragment_data/feature/feat_{block_num}'
         subprocess.call(['aws', 's3', 'cp',f'{local_feature_path}/{f_peptide_path}/',
-                         f'{bucket_feature_path}/{f_peptide_path}/', '--recursive'])
+                         f'{bucket_feature_path}/{f_peptide_path}/', '--recursive', '> /dev/null'])
         subprocess.call(['aws', 's3', 'cp', f'{local_feature_path}/{f_receptor_path}/',
-                         f'{bucket_feature_path}/{f_receptor_path}/', '--recursive'])
+                         f'{bucket_feature_path}/{f_receptor_path}/', '--recursive', '> /dev/null'])
 
+        '''

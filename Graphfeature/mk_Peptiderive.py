@@ -5,7 +5,7 @@ from multiprocessing import Process, Pool
 rosetta_base = '/mnt/lustre/zhangyiqiu/rosetta_src_2021.16.61629_bundle/main/source/bin'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
 fragment_base = f's3://Fragment_data/frag'
-
+bucket_feature_path = f's3://Fragment_data/feature/feat_{block_num}'
 mu = -49.48
 std =25.52
 isc_range = [mu-std,mu+std]
@@ -54,14 +54,14 @@ def Rosetta(file, i, fragroot):
 
     featurepipe.PDBtoFeature(descriptions, pdbpath, i, fragroot, frag_position)
 
-for num in range(256): # 0,256
+for num in range(1,50): # 0,256
     subprocess.call(['mkdir',f'{local_base}/frag/frag_{num}'])
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
-                    f'{local_base}/frag/frag_{num}', '--recursive'])
+                    f'{local_base}/frag/frag_{num}', '--recursive', '> /dev/null'])
     block = os.listdir(f'{local_base}/frag/frag_{num}')
     for fragroot in block:
         frag_files = os.listdir(f'{local_base}/frag/frag_{num}/{fragroot}')
-        pool = Pool(256) # 128
+        pool = Pool(128) # 128
 
         for pdb_file in frag_files:
             pool.apply_async(func=Rosetta, args=(pdb_file, num, fragroot,))
@@ -69,6 +69,8 @@ for num in range(256): # 0,256
         pool.close()
         pool.join()
 
+    subprocess.call(['aws', 's3', 'cp', f'{local_base}/feature/feat_{num}/',
+                    f's3://Fragment_data/feature/feat_{num}', '--recursive', '> /dev/null'])
     subprocess.call(['rm', '-r', f'{local_base}/feature/feat_{num}/'])
     subprocess.call(['rm', '-r', f'{local_base}/pepderive/derive_{num}/'])
     subprocess.call(['rm', '-r', f'{local_base}/frag/frag_{num}/'])
