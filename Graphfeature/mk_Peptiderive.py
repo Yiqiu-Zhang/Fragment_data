@@ -5,7 +5,6 @@ from multiprocessing import Process, Pool
 rosetta_base = '/mnt/lustre/zhangyiqiu/rosetta_src_2021.16.61629_bundle/main/source/bin'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
 fragment_base = f's3://Fragment_data/frag'
-bucket_feature_path = f's3://Fragment_data/feature/feat_{block_num}'
 mu = -49.48
 std =25.52
 isc_range = [mu-std,mu+std]
