@@ -58,7 +58,9 @@ for num in range(1,50): # 0,256
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
                     f'{local_base}/frag/frag_{num}', '--recursive'],
                     stdout=subprocess.DEVNULL)
+    print('FINISH COPY ======================================================================================')
     block = os.listdir(f'{local_base}/frag/frag_{num}')
+
     for fragroot in block:
         frag_files = os.listdir(f'{local_base}/frag/frag_{num}/{fragroot}')
         pool = Pool(128) # 128
