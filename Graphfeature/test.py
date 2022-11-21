@@ -7,5 +7,5 @@ os.system('aws s3 cp s3://Fragment_data/frag/frag_4 /mnt/lustre/zhangyiqiu/Fragm
 '''
 subprocess.Popen(['aws', 's3', 'cp', f's3://Fragment_data/frag/frag_4',
                 f'/mnt/lustre/zhangyiqiu/Fragment_data/frag/frag_4','--recursive'],
-                 stdout=subprocess.DEVNULL
-                )
+
+                ) # stdout=subprocess.DEVNULL
