@@ -7,5 +7,5 @@ os.system('aws s3 cp s3://Fragment_data/frag/frag_4 /mnt/lustre/zhangyiqiu/Fragm
 '''
 with open(os.devnull, 'w') as DEVNULL:
     subprocess.call(['aws', 's3', 'cp', f's3://Fragment_data/frag/frag_4',
-                    f'/mnt/lustre/zhangyiqiu/Fragment_data/frag/frag_4','--recursive', '>/dev/null'],
+                    f'/mnt/lustre/zhangyiqiu/Fragment_data/frag/frag_4','--recursive'],
                     stdout=DEVNULL)#
