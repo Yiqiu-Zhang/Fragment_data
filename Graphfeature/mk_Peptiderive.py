@@ -55,6 +55,7 @@ def Rosetta(file, i, fragroot):
     featurepipe.PDBtoFeature(descriptions, pdbpath, i, fragroot, frag_position)
 
 for num in range(1,30): # 0,256
+
     subprocess.call(['mkdir',f'{local_base}/frag/frag_{num}'])
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
                     f'{local_base}/frag/frag_{num}', '--recursive'],

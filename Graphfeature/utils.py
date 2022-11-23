@@ -213,7 +213,7 @@ def get_graph(protein_chain):
     res_name = []
     chain_bb_x = []
     side_C = []
-    rel_s = []
+
     for prot_res in protein_chain:
         if not Polypeptide.is_aa(prot_res.get_resname(), standard=True):
             continue
@@ -228,7 +228,7 @@ def get_graph(protein_chain):
             del_res.append(prot_res)
             # protein_chain.detach_child(prot_res.id)
             continue
-        prot_res.sort()# In order [<Atom N>, <Atom CA>, <Atom C>, <Atom O>]
+        sorted(prot_res)# In order [<Atom N>, <Atom CA>, <Atom C>, <Atom O>]
         atom_list = prot_res.child_list
         chain_bb_x.append([atom.get_coord() for atom in atom_list[:4]])
         side_C.append(side_central(atom_list))
