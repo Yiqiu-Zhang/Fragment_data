@@ -37,9 +37,10 @@ def parse_peptiderive(peptiderive_str):
 
 def Rosetta(file, i, fragroot):
     frag_position = file.split('.')[0]
+    pdbpath = f'{local_base}/frag/frag_{i}/{fragroot}/{file}'
     subprocess.call(['mkdir', '-p', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}'])
     subprocess.call([f'{rosetta_base}/rosetta_scripts.default.linuxgccrelease',
-                     '-in:file:s', f'{local_base}/frag/frag_{i}/{fragroot}/{file}',
+                     '-in:file:s', pdbpath,
                      '-out:path:all', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}',
                      '-jd2:delete_old_poses',
                      '-nstruct 1',
@@ -53,7 +54,8 @@ def Rosetta(file, i, fragroot):
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL)
 
-    pdbpath = f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.pdb'
+
+    # pdbpath = f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.pdb'
 
     with open(
             f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.peptiderive.txt') as f:
