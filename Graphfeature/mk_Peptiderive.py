@@ -43,7 +43,8 @@ def Rosetta(file, i, fragroot):
                     '-randomize_missing_coords',
                     '-ignore_unrecognized_res',
                     '-overwrite',
-                    '-parser:protocol test_peptiderive.xml'])
+                    '-parser:protocol test_peptiderive.xml'],
+                    stdout=subprocess.DEVNULL)
 
     pdbpath = f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.pdb'
 
