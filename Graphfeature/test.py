@@ -51,11 +51,7 @@ def Rosetta(file, i, fragroot):
                      '-ignore_unrecognized_res',
                      '-overwrite',
                      '-parser:protocol test_peptiderive.xml'],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL)
-
-
-    # pdbpath = f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.pdb'
+                    stdout=subprocess.DEVNULL)
 
     with open(
             f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.peptiderive.txt') as f:

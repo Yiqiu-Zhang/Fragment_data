@@ -31,28 +31,29 @@ def parse_peptiderive(peptiderive_str):
 
 def Rosetta(file, i, fragroot):
     frag_position = file.split('.')[0]
-    subprocess.call(['mkdir','-p', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}'])
+    pdbpath = f'{local_base}/frag/frag_{i}/{fragroot}/{file}'
+    subprocess.call(['mkdir', '-p', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}'])
     subprocess.call([f'{rosetta_base}/rosetta_scripts.default.linuxgccrelease',
-                    '-in:file:s', f'{local_base}/frag/frag_{i}/{fragroot}/{file}',
-                    '-out:path:all', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}',
-                    '-jd2:delete_old_poses',
-                    '-nstruct 1',
-                    '-out:chtimestamp',
-                    '-ex1',
-                    '-ex2',
-                    '-randomize_missing_coords',
-                    '-ignore_unrecognized_res',
-                    '-overwrite',
-                    '-parser:protocol test_peptiderive.xml'],
+                     '-in:file:s', pdbpath,
+                     '-out:path:all', f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}',
+                     '-jd2:delete_old_poses',
+                     '-nstruct 1',
+                     '-out:chtimestamp',
+                     '-ex1',
+                     '-ex2',
+                     '-randomize_missing_coords',
+                     '-ignore_unrecognized_res',
+                     '-overwrite',
+                     '-parser:protocol test_peptiderive.xml'],
                     stdout=subprocess.DEVNULL)
 
-    pdbpath = f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.pdb'
-
-    with open(f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.peptiderive.txt') as f:
+    with open(
+            f'{local_base}/pepderive/derive_{i}/{fragroot}/{frag_position}/{frag_position}_0001.peptiderive.txt') as f:
         input_peptiderive_str = f.read()
         descriptions = parse_peptiderive(input_peptiderive_str)
 
     featurepipe.PDBtoFeature(descriptions, pdbpath, i, fragroot, frag_position)
+
 
 for num in range(1,30): # 0,256
 
@@ -65,7 +66,7 @@ for num in range(1,30): # 0,256
 
     for fragroot in block:
         frag_files = os.listdir(f'{local_base}/frag/frag_{num}/{fragroot}')
-        pool = Pool(128) # 128
+        pool = Pool(64) # 128
 
         for pdb_file in frag_files:
             pool.apply_async(func=Rosetta, args=(pdb_file, num, fragroot,))
