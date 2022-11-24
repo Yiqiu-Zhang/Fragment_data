@@ -2,6 +2,9 @@ import os
 import subprocess
 import feature_pipeline as featurepipe
 from multiprocessing import Pool
+
+# srun -p bio_cluster -n1 --cpus-per-task=64 -N1 -x SH-IDC1-10-140-24-21  python3 mk_Peptiderive.py
+# sbatch -p bio_cluster -n1 --cpus-per-task=64 -N1 -x SH-IDC1-10-140-24-21 mk_feature.sh
 rosetta_base = '/mnt/lustre/zhangyiqiu/rosetta_src_2021.16.61629_bundle/main/source/bin'
 local_base = '/mnt/lustre/zhangyiqiu/Fragment_data'
 fragment_base = f's3://Fragment_data/frag'
@@ -55,7 +58,7 @@ def Rosetta(file, i, fragroot):
     featurepipe.PDBtoFeature(descriptions, pdbpath, i, fragroot, frag_position)
 
 
-for num in range(1,30): # 0,256
+for num in range(3,30): # 0,256
 
     subprocess.call(['mkdir',f'{local_base}/frag/frag_{num}'])
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
@@ -74,6 +77,7 @@ for num in range(1,30): # 0,256
         pool.close()
         pool.join()
 
+    print('finish working start to upload')
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/feature/feat_{num}/',
                     f's3://Fragment_data/feature/feat_{num}', '--recursive'],
                     stdout=subprocess.DEVNULL)
