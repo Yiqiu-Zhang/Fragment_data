@@ -81,7 +81,9 @@ for num in range(3,30): # 0,256
     subprocess.call(['aws', 's3', 'cp', f'{local_base}/feature/feat_{num}/',
                     f's3://Fragment_data/feature/feat_{num}', '--recursive'],
                     stdout=subprocess.DEVNULL)
+    '''
     subprocess.call(['rm', '-r', f'{local_base}/feature/feat_{num}/'])
     subprocess.call(['rm', '-r', f'{local_base}/pepderive/derive_{num}/'])
     subprocess.call(['rm', '-r', f'{local_base}/frag/frag_{num}/'])
 
+    '''
