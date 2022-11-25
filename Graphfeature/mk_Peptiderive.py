@@ -58,7 +58,7 @@ def Rosetta(file, i, fragroot):
     featurepipe.PDBtoFeature(descriptions, pdbpath, i, fragroot, frag_position)
 
 
-for num in range(3,30): # 0,256
+for num in range(4,30): # 0,256
 
     subprocess.call(['mkdir',f'{local_base}/frag/frag_{num}'])
     subprocess.call(['aws', 's3', 'cp', f'{fragment_base}/frag_{num}',
@@ -69,7 +69,7 @@ for num in range(3,30): # 0,256
 
     for fragroot in block:
         frag_files = os.listdir(f'{local_base}/frag/frag_{num}/{fragroot}')
-        pool = Pool(64) # 128
+        pool = Pool(96) # 128
 
         for pdb_file in frag_files:
             pool.apply_async(func=Rosetta, args=(pdb_file, num, fragroot,))
